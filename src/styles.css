@@ -1,0 +1,289 @@
+:root {
+  color: #1f2933;
+  background: #f5f7fa;
+  font-family:
+    "Noto Sans KR", "Malgun Gothic", Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button {
+  border: 0;
+  border-radius: 8px;
+  background: #2f6f73;
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  min-height: 42px;
+  padding: 0 16px;
+  white-space: nowrap;
+}
+
+button:hover {
+  background: #285f63;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: minmax(320px, 620px) minmax(320px, 420px);
+  gap: 32px;
+  min-height: 100vh;
+  padding: 32px;
+}
+
+.playArea,
+.sidePanel {
+  align-self: start;
+}
+
+.titleRow {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  color: #102a43;
+  font-size: 2.4rem;
+  line-height: 1.1;
+}
+
+h2 {
+  color: #243b53;
+  font-size: 1rem;
+}
+
+.titleRow p {
+  color: #52606d;
+  margin-top: 8px;
+}
+
+.secondaryButton {
+  background: #334e68;
+  flex: 0 0 auto;
+}
+
+.secondaryButton:hover {
+  background: #243b53;
+}
+
+.boardShell {
+  max-width: 560px;
+  width: 100%;
+}
+
+.sidePanel {
+  display: grid;
+  gap: 18px;
+}
+
+.statusBox,
+.dataSection,
+.coachPanel {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.statusBox {
+  border-left: 6px solid #2f6f73;
+}
+
+.statusBox.check {
+  border-left-color: #d97706;
+}
+
+.statusBox.ended {
+  border-left-color: #b42318;
+}
+
+.statusBox span {
+  color: #627d98;
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.statusBox strong {
+  color: #102a43;
+  display: block;
+  font-size: 1.15rem;
+}
+
+.statusBox p {
+  color: #52606d;
+  margin-top: 10px;
+}
+
+.hintText {
+  color: #2f6f73;
+  font-weight: 700;
+}
+
+.coachPanel {
+  border-left: 6px solid #4f46e5;
+}
+
+.coachState,
+.coachError {
+  border-radius: 8px;
+  line-height: 1.5;
+  margin-top: 12px;
+  padding: 12px;
+}
+
+.coachState {
+  background: #eef2ff;
+  color: #3730a3;
+}
+
+.coachError {
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.coachResult {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.coachResult span {
+  color: #627d98;
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.coachResult strong {
+  color: #102a43;
+}
+
+.coachResult > div:first-child strong {
+  display: block;
+  font-size: 1.5rem;
+  margin-top: 4px;
+}
+
+.candidateList {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.candidateList li {
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  display: grid;
+  gap: 6px;
+  grid-template-columns: 56px 72px 1fr;
+  padding: 10px;
+}
+
+.candidateList em {
+  color: #52606d;
+  font-style: normal;
+}
+
+.explanationBox {
+  background: #f5f7fa;
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+}
+
+.explanationBox p {
+  color: #334e68;
+  line-height: 1.5;
+}
+
+.sectionHeader {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.dataSection > h2 {
+  margin-bottom: 12px;
+}
+
+.sectionHelp,
+.notationName {
+  color: #52606d;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.sectionHelp {
+  margin-top: 6px;
+}
+
+.notationName {
+  margin-top: 10px;
+}
+
+textarea {
+  border: 1px solid #bcccdc;
+  border-radius: 8px;
+  color: #243b53;
+  font: 0.92rem/1.5 Consolas, "Courier New", monospace;
+  min-height: 120px;
+  padding: 12px;
+  resize: vertical;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .app {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .boardShell {
+    margin: 0 auto;
+  }
+
+  .titleRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .candidateList li {
+    grid-template-columns: 1fr;
+  }
+}
