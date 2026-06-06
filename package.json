@@ -10,7 +10,7 @@
     "coach": "tsx coach/index.ts",
     "coach-server": "tsx coach/server.ts",
     "coach-ui": "tsx coach/dev.ts",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "npm run build && gh-pages -d dist --no-history"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.0",
