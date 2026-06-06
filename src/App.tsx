@@ -15,6 +15,7 @@ function App() {
   const [isCoachLoading, setIsCoachLoading] = useState(false);
   const fenTextAreaRef = useRef<HTMLTextAreaElement>(null);
   const status = useMemo(() => getGameStatus(game), [game]);
+  const canUseLocalCoach = useMemo(() => isLocalCoachHost(), []);
   const fen = game.fen();
   const pgn = game.history().length > 0 ? game.pgn() : '아직 기록된 수가 없습니다.';
   const legalMoves = useMemo(() => getLegalMoves(game, selectedSquare), [game, selectedSquare]);
@@ -25,6 +26,11 @@ function App() {
   const bestMoveArrow = useMemo(() => buildBestMoveArrow(coachAnalysis?.bestMove), [coachAnalysis]);
   const requestAnalysis = useCallback(
     async (signal?: AbortSignal) => {
+      if (!canUseLocalCoach) {
+        setCoachError('Stockfish 코치는 로컬 전용입니다. 바탕 화면의 웹체스_통합실행.cmd로 실행하면 자동 분석을 볼 수 있습니다.');
+        return;
+      }
+
       setIsCoachLoading(true);
       setCoachError(null);
 
@@ -44,10 +50,15 @@ function App() {
         }
       }
     },
-    [fen],
+    [canUseLocalCoach, fen],
   );
 
   useEffect(() => {
+    if (!canUseLocalCoach) {
+      setCoachError('Stockfish 코치는 로컬 전용입니다. 바탕 화면의 웹체스_통합실행.cmd로 실행하면 자동 분석을 볼 수 있습니다.');
+      return;
+    }
+
     const controller = new AbortController();
     const timeout = window.setTimeout(() => {
       void requestAnalysis(controller.signal);
@@ -57,7 +68,7 @@ function App() {
       window.clearTimeout(timeout);
       controller.abort();
     };
-  }, [requestAnalysis]);
+  }, [canUseLocalCoach, requestAnalysis]);
 
   function handleMove(sourceSquare: Square, targetSquare: Square): boolean {
     const nextGame = cloneGame(game);
@@ -249,6 +260,10 @@ function buildBestMoveArrow(bestMove?: string): { startSquare: string; endSquare
       color: '#4f46e5',
     },
   ];
+}
+
+function isLocalCoachHost(): boolean {
+  return window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
 }
 
 export default App;
