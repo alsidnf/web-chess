@@ -50,12 +50,12 @@ Set-Location $repoRoot
 New-Item -ItemType Directory -Path $logDir -Force | Out-Null
 
 Write-Host ""
-Write-Host "웹 체스 + Stockfish 코치를 시작합니다."
-Write-Host "프로젝트: $repoRoot"
+Write-Host "Starting Web Chess + Stockfish Coach."
+Write-Host "Project: $repoRoot"
 
 if (-not (Get-Command npm.cmd -ErrorAction SilentlyContinue)) {
-  Write-Host "Node.js/npm을 찾지 못했습니다. Node.js를 먼저 설치해 주세요."
-  Read-Host "Enter를 누르면 닫습니다"
+  Write-Host "Node.js/npm was not found. Please install Node.js first."
+  Read-Host "Press Enter to close"
   exit 1
 }
 
@@ -63,17 +63,17 @@ if (Test-Path $stockfishPath) {
   $env:STOCKFISH_PATH = $stockfishPath
   Write-Host "Stockfish: $stockfishPath"
 } else {
-  Write-Host "Stockfish 자동 경로를 찾지 못했습니다. 앱이 PATH 또는 STOCKFISH_PATH를 다시 확인합니다."
+  Write-Host "Stockfish was not found at the known WinGet path. The app will also check PATH and STOCKFISH_PATH."
 }
 
 $existingProcessIds = Get-PortProcessIds -Ports @($webPort, $coachPort)
 if ($existingProcessIds) {
   Write-Host ""
-  Write-Host "이미 사용 중인 포트가 있습니다: $($existingProcessIds -join ', ')"
-  $answer = Read-Host "기존 웹 체스/코치 프로세스를 종료하고 새로 시작할까요? (Y/N)"
+  Write-Host "These ports are already in use by process id(s): $($existingProcessIds -join ', ')"
+  $answer = Read-Host "Stop existing Web Chess/Coach processes and restart? (Y/N)"
   if ($answer -notin @("Y", "y")) {
-    Write-Host "시작을 취소했습니다."
-    Read-Host "Enter를 누르면 닫습니다"
+    Write-Host "Startup cancelled."
+    Read-Host "Press Enter to close"
     exit 0
   }
 
@@ -92,33 +92,33 @@ $process = Start-Process -FilePath "npm.cmd" `
   -RedirectStandardError $errLog
 
 Write-Host ""
-Write-Host "앱을 켜는 중입니다..."
-Write-Host "로그: $outLog"
+Write-Host "Starting the app..."
+Write-Host "Log: $outLog"
 
 $webReady = Wait-ForUrl -Url $webUrl -TimeoutSeconds 45
 $apiReady = Wait-ForUrl -Url "http://127.0.0.1:$coachPort/api/health" -TimeoutSeconds 20
 
 if ($webReady) {
   Start-Process $webUrl
-  Write-Host "웹앱을 열었습니다: $webUrl"
+  Write-Host "Opened web app: $webUrl"
 } else {
-  Write-Host "웹앱 준비 시간이 초과되었습니다. 로그를 확인해 주세요."
+  Write-Host "Timed out while waiting for the web app. Please check the log."
 }
 
 if ($apiReady) {
-  Write-Host "Stockfish 코치 서버가 준비되었습니다."
+  Write-Host "Stockfish coach server is ready."
 } else {
-  Write-Host "코치 서버 준비 시간이 초과되었습니다. Stockfish 설치와 로그를 확인해 주세요."
+  Write-Host "Timed out while waiting for the coach server. Please check Stockfish and the log."
 }
 
 Write-Host ""
-Write-Host "종료하려면 이 창에서 Enter를 누르세요."
+Write-Host "Press Enter in this window to stop everything."
 Read-Host | Out-Null
 
-Write-Host "웹앱과 코치 서버를 종료합니다..."
+Write-Host "Stopping the web app and coach server..."
 Stop-ProcessTree -ProcessId $process.Id
 foreach ($processId in (Get-PortProcessIds -Ports @($webPort, $coachPort))) {
   Stop-ProcessTree -ProcessId $processId
 }
-Write-Host "종료 완료."
+Write-Host "Stopped."
 Start-Sleep -Seconds 1
